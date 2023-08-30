@@ -37,9 +37,6 @@ class Item(Base):
             + f"status={self.status}, " \
             + f"found_by={self.found_by}, " \
             + f"claimed_by={self.claimed_by}, " \
-            + f"color={self.color}, " \
-            + f"weight={self.weight}" \
             + ">"
-
     
 

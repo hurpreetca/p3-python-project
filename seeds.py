@@ -1,12 +1,12 @@
 from models import User 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import ipdb
+
 from faker import Faker
 
 fake = Faker()
 
-ipdb.set_trace()
+import ipdb;
 
 
 engine = create_engine("sqlite:///main.db")
@@ -16,8 +16,12 @@ session= Session()
 
 
 
-# #Use faker to seed data for user table
-# for _ in range(10):
+#Use faker to seed data for user table
+for _ in range(10):
 
-#     user= User(firstname= fake.first_name(), lastname= fake.last_name(), email= fake.ascii_company_email())
-#     print(user)
+    user= User(name= fake.name(), email= fake.ascii_company_email())
+    print(user)
+
+
+
+ipdb.set_trace()
