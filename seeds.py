@@ -20,11 +20,31 @@ if __name__ == "__main__":
 for _ in range(10):
 
     user= User(name= fake.name(), email= fake.ascii_company_email())
-    # print(user)
-    session.bulk_save_objects(user)
+    print(user)
+    session.add(user)
+    session.commit()
 
-session.commit()
-
-
+items= ["Keys",
+        "Wallets",
+        "Phones",
+        "Sunglasses",
+        "Umbrellas",
+        "Headphones",
+        "Jewelry",
+        "Documents",
+        "Chargers",
+        "Gloves",
+        "Scarves",
+        "Hats",
+        "Books",
+        "Pens",
+        "Water Bottles",
+        "Lunch Boxes",
+        "Laptops/Tablets",
+        "Cameras",
+        "Chapsticks",
+        "Flash Drives",
+        "Medication"
+        ]
 
 ipdb.set_trace()
