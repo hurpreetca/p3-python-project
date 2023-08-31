@@ -14,17 +14,24 @@ if __name__ == "__main__":
     Session= sessionmaker(bind=engine)
     session= Session()
 
+    #Deleting the existing data before seeding again
+    session.query(User).delete()
+    session.query(Item).delete()
 
+###########################################################################################################
 
-#Use faker to seed data for user table
-for _ in range(10):
+#Use faker to seed data for User table
+for _ in range(20):
 
     user= User(name= fake.name(), email= fake.ascii_company_email())
     print(user)
     session.add(user)
     session.commit()
 
-items= ["Keys",
+###########################################################################################################
+
+
+item_name= ["Keys",
         "Wallets",
         "Phones",
         "Sunglasses",
@@ -46,5 +53,7 @@ items= ["Keys",
         "Flash Drives",
         "Medication"
         ]
+
+status= ["Claimed", "Unclaimed"]
 
 ipdb.set_trace()
