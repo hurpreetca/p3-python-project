@@ -8,11 +8,11 @@ fake = Faker()
 
 import ipdb;
 
+if __name__ == "__main__":
+    engine = create_engine("sqlite:///main.db")
 
-engine = create_engine("sqlite:///main.db")
-
-Session= sessionmaker(bind=engine)
-session= Session()
+    Session= sessionmaker(bind=engine)
+    session= Session()
 
 
 
@@ -20,7 +20,10 @@ session= Session()
 for _ in range(10):
 
     user= User(name= fake.name(), email= fake.ascii_company_email())
-    print(user)
+    # print(user)
+    session.bulk_save_objects(user)
+
+session.commit()
 
 
 
