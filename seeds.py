@@ -1,6 +1,7 @@
 from models import User 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import random
 
 from faker import Faker
 
@@ -31,7 +32,7 @@ for _ in range(20):
 ###########################################################################################################
 
 
-item_name= ["Keys",
+ITEMS= ["Keys",
         "Wallets",
         "Phones",
         "Sunglasses",
@@ -55,5 +56,5 @@ item_name= ["Keys",
         ]
 
 status= ["Claimed", "Unclaimed"]
-
+item = Item(item_name= random.choice)
 ipdb.set_trace()
