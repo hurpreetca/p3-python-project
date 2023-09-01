@@ -1,4 +1,4 @@
-from models import User 
+from models import User, Item
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import random
@@ -55,6 +55,7 @@ ITEMS= ["Keys",
         "Medication"
         ]
 
-status= ["Claimed", "Unclaimed"]
-item = Item(item_name= random.choice)
+STATUS= ["Claimed", "Unclaimed"]
+item = Item(item_name= random.choice(ITEMS),status= random.choice(STATUS) )
+print(item)
 ipdb.set_trace()
