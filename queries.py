@@ -32,10 +32,6 @@ def handle_report_item(cls, name, email, item_name, status, final_status):
     session.commit()
 
 
-def check_email(email):
-    return session.query(User).filter_by(email=email).first() == None
-
-
 def find_by_email(email):
     return session.query(User).filter_by(email=email).first()
 
@@ -49,18 +45,16 @@ def handle_lost_item(item_name, user_id, status, final_status):
     print(yellow("Item Reported Successfully!"))
 
 
-def find_by_item_name(self, text):
-    query = session.query(Item).filter(Item.item_name.like(f"%{text}"))
-    return query.all()
-
-
 def lost_item_list(status):
-    query = session.query(Item).filter_by(status="Lost").all()
+    query = session.query(Item).filter_by(status=status).all()
+    return query
 
 
 def found_item_list(status):
-    query = session.query(Item).filter_by(status="Found").all()
+    query = session.query(Item).filter_by(status=status).all()
+    return query
 
 
 def claimed_item_list(final_status):
-    query = session.query(Item).filter_by(final_status="Resolved").all()
+    query = session.query(Item).filter_by(final_status=final_status).all()
+    return query

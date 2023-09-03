@@ -1,7 +1,7 @@
 from simple_term_menu import TerminalMenu
 from prettycli import red, green, blue
 from models import User, Item
-import ipdb
+from tabulate import tabulate
 from queries import *
 
 
@@ -25,10 +25,7 @@ class Cli:
         menu_entry_index = terminal_menu.show()
 
         if options[menu_entry_index] == "Report an Item":
-            handle_report_item(
-                name,
-                email,
-            )
+            handle_report_item()
         elif options[menu_entry_index] == "Claim an Item":
             self.handle_item_claim()
         elif options[menu_entry_index] == "Display all Items":
@@ -51,7 +48,8 @@ class Cli:
         terminal_sub_menu = TerminalMenu(options)
         sub_menu_entry_index = terminal_sub_menu.show()
         if options[sub_menu_entry_index] == "Lost an Item":
-            self.handle_lost_item()
+            result = handle_lost_item()
+            print(red("Your request is added to the system."))
         elif options[sub_menu_entry_index] == "Found an Item":
             self.handle_found_item()
         elif options[sub_menu_entry_index] == "Return to the main-menu":
@@ -74,13 +72,17 @@ class Cli:
         terminal_sub_menu = TerminalMenu(options)
         sub_menu_entry_index = terminal_sub_menu.show()
         if options[sub_menu_entry_index] == "All lost Items":
-            self.lost_item_list(status=status)
+            result = lost_item_list(status="Lost")
+            print(result)
         elif options[sub_menu_entry_index] == "All found Items":
-            self.found_item_list(status="Found")
+            result = found_item_list(status="Found")
+            print(result)
         elif options[sub_menu_entry_index] == "All claimed Items":
-            self.claimed_item_list("Resolved")
+            result = claimed_item_list(final_status="Resolved")
+            print(result)
         elif options[sub_menu_entry_index] == "Find by Item Name":
-            self.find_by_item_name(item_name)
+            self.find_by_item_name()
+
         elif options[sub_menu_entry_index] == "Return to the main-menu":
             self.start()
         else:
@@ -94,6 +96,12 @@ class Cli:
     def exit(self):
         print("\n" * 30)
         print(green("Thank you for visiting, Goodbye!"))
+
+    def find_by_item_name(self):
+        self.clear_screen()
+        item_name_text = input("item_name:")
+        query = session.query(Item).filter(Item.item_name.like(f"%{item_name_text}"))
+        print(query.all())
 
 
 ##########################################################################################################

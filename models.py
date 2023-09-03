@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import declarative_base, relationship, backref
+from sqlalchemy.orm import declarative_base, relationship, backref, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from session import session
 
 Base = declarative_base()
 
@@ -20,6 +22,15 @@ class User(Base):
             f"email= '{self.email}>\n\n"
         )
 
+    @classmethod
+    def create_user(cls, name, email):
+        user = cls(name=name, email=email)
+
+        session.add(user)
+        session.commit()
+
+        return user
+
 
 class Item(Base):
     __tablename__ = "items"
@@ -37,6 +48,6 @@ class Item(Base):
             + f"id={self.id}, "
             + f"item_name={self.item_name}, "
             + f"item_status={self.status}, "
-            + f"final_status={self.final_status}, "
+            + f"final_status={self.final_status} "
             + ">"
         )

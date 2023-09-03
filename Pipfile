@@ -10,6 +10,7 @@ prettycli = "*"
 simple-term-menu = "*"
 faker = "*"
 ipdb = "*"
+tabulate = "*"
 
 [dev-packages]
 
