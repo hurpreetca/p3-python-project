@@ -27,7 +27,7 @@ class Item(Base):
     id = Column(Integer, primary_key=True)
     item_name = Column(String, nullable=False)
     status = Column(String(10))
-    resolution_status = Column(String)
+    final_status = Column(String(20))
 
     user_id = Column(Integer, ForeignKey("users.id"))
 
@@ -36,7 +36,11 @@ class Item(Base):
             f"\n<Item "
             + f"id={self.id}, "
             + f"item_name={self.item_name}, "
-            + f"item_status={self.item_status}, "
-            + f"resolution_status={self.resolution_status}, "
+            + f"item_status={self.status}, "
+            + f"final_status={self.final_status}, "
             + ">"
         )
+
+
+def find_by_item_name(text):
+    query = session.query(Item).filter(Item.item_name.like(f"%{text}"))
