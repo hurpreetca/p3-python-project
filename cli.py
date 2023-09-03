@@ -2,6 +2,7 @@ from simple_term_menu import TerminalMenu
 from prettycli import red, green, blue
 from models import *
 import ipdb
+from queries import *
 
 
 class Cli:
@@ -64,7 +65,8 @@ class Cli:
             "All lost Items",
             "All found Items",
             "All claimed Items",
-            "Find by Item Name" "Return to the main-menu",
+            "Find by Item Name",
+            "Return to the main-menu",
         ]
         terminal_sub_menu = TerminalMenu(options)
         sub_menu_entry_index = terminal_sub_menu.show()
@@ -75,7 +77,7 @@ class Cli:
         elif options[sub_menu_entry_index] == "All claimed Items":
             claimed_item_list()
         elif options[sub_menu_entry_index] == "Find by Item Name":
-            find_by_item_name()
+            find_by_item_name(item_name)
         elif options[sub_menu_entry_index] == "Return to the main-menu":
             self.start()
         else:
