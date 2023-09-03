@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from prettycli import yellow
+from prettycli import yellow, blue, red
 from models import User, Item
 
 
@@ -16,33 +16,11 @@ session = Session()
 #     return new_user_instance
 
 
-@classmethod
-def handle_report_item(cls, name, email, item_name, status, final_status):
-    # Create a new User instance
-    new_user = cls(name=name, email=email)
+def handle_report_item(self):
+    self.clear_screen()
 
-    # Create a new Item instance associated with the user
-    new_item = Item(
-        item_name=item_name, status=status, final_status=final_status, user=new_user
-    )
-
-    # Add both the User and Item instances to the session and commit the changes
-    session.add(new_user)
-    session.add(new_item)
-    session.commit()
-
-
-def find_by_email(email):
-    return session.query(User).filter_by(email=email).first()
-
-
-def handle_lost_item(item_name, user_id, status, final_status):
-    new_lost_item = Item(
-        item_name=item_name, user_id=user_id, status=status, final_status=final_status
-    )
-    session.add(new_lost_item)
-    session.commit()
-    print(yellow("Item Reported Successfully!"))
+    item = Item.add_item()
+    print(blue("Item Reported Successfully!"))
 
 
 def lost_item_list(status):
