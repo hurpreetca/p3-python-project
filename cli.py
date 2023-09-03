@@ -85,7 +85,9 @@ class Cli:
 
         if options[menu_entry_index] == "Report an Item":
             self.handle_report_item()
-        elif options[menu_entry_index] == "Claim an Item":
+        elif (
+            options[menu_entry_index] == "Claim an Item"
+        ):  # Have not able to figure out the idea for this one yet
             self.handle_item_claim()
         elif options[menu_entry_index] == "Existing Enquiry":
             self.handle_existing_enquiries()
@@ -99,8 +101,7 @@ class Cli:
     #     ##########################################################################################################
 
     def handle_all_item_list(self):
-        print(blue("Select a suitable option: /n"))
-        self.clear_screen()
+        print(blue("Select a suitable option: \n"))
         options = [
             "All lost Items",
             "All found Items",
@@ -110,17 +111,28 @@ class Cli:
         ]
         terminal_sub_menu = TerminalMenu(options)
         sub_menu_entry_index = terminal_sub_menu.show()
+
         if options[sub_menu_entry_index] == "All lost Items":
             result = lost_item_list(status="Lost")
-            print(result)
+
+            print(result + " \n \n")
+            self.handle_all_item_list()
+
         elif options[sub_menu_entry_index] == "All found Items":
             result = found_item_list(status="Found")
-            print(result)
+
+            print(result + " \n \n")
+            self.handle_all_item_list()
+
         elif options[sub_menu_entry_index] == "All claimed Items":
             result = claimed_item_list(final_status="Resolved")
-            print(result)
+
+            print(result + " \n \n")
+            self.handle_all_item_list()
+
         elif options[sub_menu_entry_index] == "Find by Item Name":
             self.find_by_item_name()
+            self.handle_all_item_list()
 
         elif options[sub_menu_entry_index] == "Return to the main-menu":
             self.start()
@@ -139,7 +151,10 @@ class Cli:
     def find_by_item_name(self):
         self.clear_screen()
         item_name_text = input("item_name: ")
-        query = session.query(Item).filter(Item.item_name.like(f"%{item_name_text}"))
+        query = session.query(Item).filter(
+            Item.item_name.like(f"%{item_name_text}").lower()
+        )
+        print(red("Your search results: \n"))
         print(query.all())
 
     def handle_report_item(self):
@@ -150,9 +165,15 @@ class Cli:
             if status in ["lost", "found"]:
                 break  # Exit the loop if the input is valid
             else:
-                print("Invalid input. Please enter 'lost' or 'found'.")
+                print("Invalid input! Please Try Again!")
+        while True:
+            final_status = input("Final Status (Resolved or Unresolved): ").lower()
+            if final_status in ["Resolved", "Unresolved"]:
+                break  # Exit the loop if the input is valid
+            else:
+                print("Invalid input! Please Try Again.")
         item = Item.add_item(
-            item_name, status, final_status="Unresolved", user_id=self.current_user.id
+            item_name, status, final_status, user_id=self.current_user.id
         )
         print(blue("Item Reported Successfully!"))
         self.show_user_menu_options()

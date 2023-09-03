@@ -72,3 +72,16 @@ class Item(Base):
         session.commit()
 
         return item
+
+    # @classmethod
+    # def update_item(cls, item_name, status, final_status, user_id):
+    #     item = cls(
+    #         item_name=item_name,
+    #         status=status,
+    #         final_status=final_status,
+    #         user_id=user_id,
+    #     )
+    #     session.add(item)
+    #     session.commit()
+
+    #     return item
