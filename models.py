@@ -23,12 +23,16 @@ class User(Base):
         )
 
     @classmethod
+    def find_user_by_email(cls, email):
+        user = session.query(cls).filter(cls.email == email).first()
+        return user
+
+    @classmethod
     def create_user(cls, name, email):
         user = cls(name=name, email=email)
 
         session.add(user)
         session.commit()
-
         return user
 
 
@@ -51,3 +55,16 @@ class Item(Base):
             + f"final_status={self.final_status} "
             + ">"
         )
+
+    @classmethod
+    def add_item(cls, item_name, status, final_status, user_id):
+        item = cls(
+            item_name=item_name,
+            status=status,
+            final_status=final_status,
+            user_id=user_id,
+        )
+        session.add(item)
+        session.commit()
+
+        return item

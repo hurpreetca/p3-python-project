@@ -3,11 +3,12 @@ from prettycli import red, green, blue
 from models import User, Item
 from tabulate import tabulate
 from queries import *
+import re
 
 
 class Cli:
     def __init__(self):
-        pass
+        current_user = None
 
     def start(self):
         self.clear_screen()
@@ -15,9 +16,67 @@ class Cli:
             green("Step into the gateway of rediscovery at our Lost and Found Box! \n")
         )
         print(green("Please select an option"))
+        options = ["Login", "Sign Up", "Exit"]
+        terminal_menu = TerminalMenu(options)
+        menu_entry_index = terminal_menu.show()
+
+        if options[menu_entry_index] == "Login":
+            self.handle_login()
+        elif options[menu_entry_index] == "Sign Up":
+            self.handle_sign_up()
+        else:
+            self.exit()
+
+    def handle_login(self):
+        self.clear_screen()
+        email = input("Please enter your email: ")
+        regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
+
+        if re.fullmatch(regex, email):
+            user = User.find_user_by_email(email)
+            if user:
+                self.current_user = user
+                print(yellow(f"Hello, {user.name}!"))
+                self.show_user_menu_options()
+            else:
+                print(red("User not found. Please try again!"))
+                self.start()
+        else:
+            print(red("Invalid email. Please try again"))
+            self.start()
+
+    def handle_sign_up(self):
+        self.clear_screen()
+
+        name = input("Enter your full name: ")
+        email = input("Enter your email: ")
+
+        regex = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
+
+        user = User.find_user_by_email(email)
+
+        if user:
+            print(
+                red("This email is already in used. Please sign up with another email")
+            )
+            self.start()
+        else:
+            if re.fullmatch(regex, email):
+                user = User.create_user(name, email)
+
+                self.current_user = user
+                print(blue(f"Hello, {user.name}!"))
+
+                self.show_user_menu_options()
+            else:
+                print(red("Invalid email. Please try again!"))
+                self.start()
+
+    def show_user_menu_options(self):
         options = [
             "Report an Item",
             "Claim an Item",
+            "Existing Enquiry",
             "Display all Items",
             "Exit",
         ]
