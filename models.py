@@ -40,7 +40,3 @@ class Item(Base):
             + f"final_status={self.final_status}, "
             + ">"
         )
-
-
-def find_by_item_name(text):
-    query = session.query(Item).filter(Item.item_name.like(f"%{text}"))
