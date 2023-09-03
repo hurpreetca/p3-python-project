@@ -14,6 +14,10 @@ Fork the repo and clone it locally in the desired destination folder using below
 git clone SSH_File
 ```
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 523cc271cb21263c057409e882b44298c6666cbd
 ## Usage
 
 After cloning, run the following command to install the relavant environment and dependancies to get the application working.
@@ -48,10 +52,18 @@ This application while functional, might not include all the functionalities of 
 - Add a method to display list of lost and found items and also list them according to their final_status.
 - Add a method to change the final_status when someone claimed any item marking the completion of the process.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 523cc271cb21263c057409e882b44298c6666cbd
 ## Resources
 
 - https://pypi.org/
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 523cc271cb21263c057409e882b44298c6666cbd
 <br>
 
 - https://docs.sqlalchemy.org/en/14/index.html
