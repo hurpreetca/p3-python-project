@@ -84,9 +84,11 @@ class Cli:
         menu_entry_index = terminal_menu.show()
 
         if options[menu_entry_index] == "Report an Item":
-            handle_report_item()
+            self.handle_report_item()
         elif options[menu_entry_index] == "Claim an Item":
             self.handle_item_claim()
+        elif options[menu_entry_index] == "Existing Enquiry":
+            self.handle_existing_enquiries()
         elif options[menu_entry_index] == "Display all Items":
             self.handle_all_item_list()
         elif options[menu_entry_index] == "Exit":
@@ -94,29 +96,7 @@ class Cli:
         else:
             self.exit()
 
-        ##########################################################################################################
-
-    def handle_report_item(self):
-        self.clear_screen()
-        print(blue("Select a suitable option: /n"))
-        options = [
-            "Lost an Item",
-            "Found an Item",
-            "Return to the main-menu",
-        ]
-        terminal_sub_menu = TerminalMenu(options)
-        sub_menu_entry_index = terminal_sub_menu.show()
-        if options[sub_menu_entry_index] == "Lost an Item":
-            result = handle_lost_item()
-            print(red("Your request is added to the system."))
-        elif options[sub_menu_entry_index] == "Found an Item":
-            self.handle_found_item()
-        elif options[sub_menu_entry_index] == "Return to the main-menu":
-            self.start()
-        else:
-            self.exit()
-
-        ##########################################################################################################
+    #     ##########################################################################################################
 
     def handle_all_item_list(self):
         print(blue("Select a suitable option: /n"))
@@ -153,14 +133,41 @@ class Cli:
 
     ######################################EXIT TO CLOSE THE PROGRAM###########################################
     def exit(self):
-        print("\n" * 30)
+        self.clear_screen()
         print(green("Thank you for visiting, Goodbye!"))
 
     def find_by_item_name(self):
         self.clear_screen()
-        item_name_text = input("item_name:")
+        item_name_text = input("item_name: ")
         query = session.query(Item).filter(Item.item_name.like(f"%{item_name_text}"))
         print(query.all())
+
+    def handle_report_item(self):
+        self.clear_screen()
+        item_name = input("Item Name: ")
+        while True:
+            status = input("Status (Lost or Found): ").lower()
+            if status in ["lost", "found"]:
+                break  # Exit the loop if the input is valid
+            else:
+                print("Invalid input. Please enter 'lost' or 'found'.")
+        item = Item.add_item(
+            item_name, status, final_status="Unresolved", user_id=self.current_user.id
+        )
+        print(blue("Item Reported Successfully!"))
+        self.show_user_menu_options()
+
+    def handle_existing_enquiries(self):
+        self.clear_screen()
+
+        query = session.query(Item).filter(Item.user_id.like(self.current_user.id))
+        print(blue("Already existing enquiries by the user: /n"))
+        print(query.all())
+
+    def handle_item_claim(self):
+        self.clear_screen()
+
+        item_name = input("Item Name: ")
 
 
 ##########################################################################################################
