@@ -85,10 +85,9 @@ class Cli:
 
         if options[menu_entry_index] == "Report an Item":
             self.handle_report_item()
-        elif (
-            options[menu_entry_index] == "Claim an Item"
-        ):  # Have not able to figure out the idea for this one yet
-            self.handle_item_claim()
+        elif options[menu_entry_index] == "Claim an Item":
+            item_name_text = input("item_name: ")
+            handle_item_claim(item_name_text)
         elif options[menu_entry_index] == "Existing Enquiry":
             self.handle_existing_enquiries()
         elif options[menu_entry_index] == "Display all Items":
@@ -115,27 +114,29 @@ class Cli:
         if options[sub_menu_entry_index] == "All lost Items":
             result = lost_item_list(status="Lost")
 
-            print(result + " \n \n")
+            print(result)
+            print("\n")
             self.handle_all_item_list()
 
         elif options[sub_menu_entry_index] == "All found Items":
             result = found_item_list(status="Found")
 
-            print(result + " \n \n")
+            print(result)
+            print("\n")
             self.handle_all_item_list()
 
         elif options[sub_menu_entry_index] == "All claimed Items":
             result = claimed_item_list(final_status="Resolved")
 
-            print(result + " \n \n")
+            print(result)
+            print("\n")
             self.handle_all_item_list()
 
         elif options[sub_menu_entry_index] == "Find by Item Name":
             self.find_by_item_name()
-            self.handle_all_item_list()
 
         elif options[sub_menu_entry_index] == "Return to the main-menu":
-            self.start()
+            self.show_user_menu_options()
         else:
             self.exit()
 
@@ -151,11 +152,10 @@ class Cli:
     def find_by_item_name(self):
         self.clear_screen()
         item_name_text = input("item_name: ")
-        query = session.query(Item).filter(
-            Item.item_name.like(f"%{item_name_text}").lower()
-        )
+        query = session.query(Item).filter(Item.item_name.like(f"%{item_name_text}"))
         print(red("Your search results: \n"))
         print(query.all())
+        self.handle_all_item_list()
 
     def handle_report_item(self):
         self.clear_screen()
@@ -166,10 +166,11 @@ class Cli:
                 break  # Exit the loop if the input is valid
             else:
                 print("Invalid input! Please Try Again!")
+
         while True:
             final_status = input("Final Status (Resolved or Unresolved): ").lower()
-            if final_status in ["Resolved", "Unresolved"]:
-                break  # Exit the loop if the input is valid
+            if final_status in ["resolved", "unresolved"]:
+                break
             else:
                 print("Invalid input! Please Try Again.")
         item = Item.add_item(
@@ -184,6 +185,7 @@ class Cli:
         query = session.query(Item).filter(Item.user_id.like(self.current_user.id))
         print(blue("Already existing enquiries by the user: /n"))
         print(query.all())
+        self.handle_all_item_list()
 
     def handle_item_claim(self):
         self.clear_screen()
